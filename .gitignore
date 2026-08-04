@@ -11,6 +11,7 @@ __pycache__/
 .mypy_cache/
 .coverage
 .local/
+.cache/
 logs/
 build/
 dist/
@@ -22,6 +23,7 @@ dist/
 *.pfx
 coverage/
 coverage.xml
+*.har
 *.tsbuildinfo
 .env
 .env.*
