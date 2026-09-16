@@ -4,7 +4,7 @@ import hashlib
 
 import json
 
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Literal
 
 def sha256_bytes(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
