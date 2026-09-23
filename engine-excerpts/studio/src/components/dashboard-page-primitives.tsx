@@ -1,5 +1,5 @@
 import { useId, type ReactNode } from "react";
-import type { LucideIcon } from "lucide-react";
+import { ChevronRight, type LucideIcon } from "lucide-react";
 
 function joinClassNames(...values: Array<string | undefined>) {
   return values.filter(Boolean).join(" ");
@@ -10,7 +10,7 @@ export type DashboardPageHeroProps = {
   badges: readonly string[];
   className?: string;
   detail: string;
-  eyebrow: string;
+  eyebrow?: string;
   headingLevel?: "h1" | "h2";
   icon: LucideIcon;
   title: string;
@@ -433,7 +433,9 @@ export function DashboardProcessRail({
             <small>{step.detail}</small>
           </div>
           {connectors && index < steps.length - 1 ? (
-            <span aria-hidden="true" className="dashboardProcessRailConnector">›</span>
+            <span aria-hidden="true" className="dashboardProcessRailConnector">
+              <ChevronRight size={14} />
+            </span>
           ) : null}
         </li>
       ))}
@@ -490,7 +492,10 @@ export function DashboardDisclosure({
 }) {
   return (
     <details className={joinClassNames("dashboardDisclosure", className)} open={defaultOpen || undefined}>
-      <summary aria-label={summaryLabel}>{summary}</summary>
+      <summary aria-label={summaryLabel}>
+        {summary}
+        <ChevronRight aria-hidden="true" className="dashboardDisclosureChevron" size={16} />
+      </summary>
       <div className="dashboardDisclosureBody">{children}</div>
     </details>
   );
