@@ -1,0 +1,213 @@
+
+
+:root {
+  color-scheme: dark;
+
+  /* Colour — surfaces */
+  --ui-bg: #181818;
+  --ui-bg-chrome: #141414;
+  --ui-bg-sunken: #121212;
+  --ui-surface: #1f1f1f;
+  --ui-surface-raised: #1c1c1c;
+  --ui-hover: rgba(255, 255, 255, 0.045);
+  --ui-active: rgba(255, 255, 255, 0.065);
+  --ui-pressed: rgba(255, 255, 255, 0.09);
+
+  /* Colour — hairlines */
+  --ui-border: rgba(255, 255, 255, 0.08);
+  --ui-border-subtle: rgba(255, 255, 255, 0.05);
+  --ui-border-strong: rgba(255, 255, 255, 0.12);
+
+  /* Colour — text */
+  --ui-text: #f0f0f0;
+  --ui-text-strong: #f0f0f0;
+  --ui-text-secondary: #b8b8b8;
+  --ui-text-tertiary: #9a9a9a;
+  --ui-text-muted: #858585;
+
+  /* Colour — icons */
+  --ui-icon: #a7a7a7;
+  --ui-icon-strong: #dfdfdf;
+
+  /* Colour — accent */
+  --ui-accent: #3a9cff;
+  --ui-accent-hover: #5aadff;
+  --ui-accent-rgb: 58, 156, 255;
+  --ui-accent-soft: rgba(58, 156, 255, 0.14);
+  --ui-on-accent: #0b1f38;
+  --ui-focus-ring: 0 0 0 2px rgba(58, 156, 255, 0.5);
+
+  /* Colour — status */
+  --ui-success: #45a86b;
+  --ui-warning: #e0b25c;
+  --ui-danger: #ef6b73;
+  --ui-success-soft: rgba(69, 168, 107, 0.14);
+  --ui-warning-soft: rgba(224, 178, 92, 0.14);
+  --ui-danger-soft: rgba(239, 107, 115, 0.14);
+
+  /* Colour — toggles */
+  --ui-toggle-on: var(--ui-success);
+  --ui-toggle-off: #4d4d4d;
+  --ui-toggle-knob: #ffffff;
+
+  /* Colour — scrollbars */
+  --ui-scrollbar-thumb: rgba(255, 255, 255, 0.14);
+  --ui-scrollbar-thumb-hover: rgba(255, 255, 255, 0.22);
+  --ui-scrollbar-thumb-active: rgba(255, 255, 255, 0.26);
+
+  /* Colour — elevation and overlays */
+  --ui-shadow-popover: 0 2px 8px rgba(0, 0, 0, 0.24), 0 12px 28px rgba(0, 0, 0, 0.28);
+  --ui-overlay: rgba(0, 0, 0, 0.5);
+
+  /* Typography */
+  --ui-font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, Roboto, "Helvetica Neue", Arial, sans-serif;
+  --ui-font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --ui-text-xs: 11px;
+  --ui-text-sm: 12px;
+  --ui-text-base: 13px;
+  --ui-text-md: 14px;
+  --ui-text-lg: 17px;
+  --ui-text-xl: 20px;
+  --ui-text-2xl: 24px;
+  --ui-leading: 1.4;
+  --ui-leading-tight: 1.25;
+  --ui-leading-prose: 1.55;
+  --ui-weight-regular: 400;
+  --ui-weight-medium: 500;
+  --ui-weight-emphasis: 590;
+  --ui-weight-semibold: 600;
+
+  /* Space (4px grid, 2px micro) */
+  --ui-space-0-5: 2px;
+  --ui-space-1: 4px;
+  --ui-space-1-5: 6px;
+  --ui-space-2: 8px;
+  --ui-space-3: 12px;
+  --ui-space-3-5: 14px;
+  --ui-space-4: 16px;
+  --ui-space-5: 20px;
+  --ui-space-6: 24px;
+  --ui-space-7: 28px;
+  --ui-space-8: 32px;
+  --ui-space-10: 40px;
+  --ui-space-12: 48px;
+
+  /* Controls, rows, chrome */
+  --ui-control-h-xs: 20px;
+  --ui-control-h-sm: 24px;
+  --ui-control-h: 28px;
+  --ui-control-h-lg: 32px;
+  --ui-row-h: 30px;
+  --ui-nav-cell-h: 28px;
+  --ui-titlebar-h: 36px;
+  --ui-tabbar-h: 35px;
+  --ui-tab-h: 24px;
+
+  /* Radius (4/6/8/12/16 — no 10) */
+  --ui-radius-xs: 4px;
+  --ui-radius-sm: 6px;
+  --ui-radius-md: 8px;
+  --ui-radius-lg: 12px;
+  --ui-radius-xl: 16px;
+  --ui-radius-full: 9999px;
+
+  /* Motion */
+  --ui-dur-instant: 50ms;
+  --ui-dur-fast: 100ms;
+  --ui-dur: 150ms;
+  --ui-dur-slow: 200ms;
+  --ui-ease: ease;
+  --ui-ease-move: cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* Base element styles */
+
+html {
+  color: var(--ui-text);
+  background: var(--ui-bg);
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  background: var(--ui-bg);
+  color: var(--ui-text);
+  font-family: var(--ui-font-sans);
+  font-size: var(--ui-text-base);
+  line-height: var(--ui-leading);
+}
+
+::selection {
+  color: var(--ui-on-accent);
+  background: var(--ui-accent);
+}
+
+/* Thin scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--ui-scrollbar-thumb) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  border-radius: var(--ui-radius-full);
+  background: var(--ui-scrollbar-thumb);
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--ui-scrollbar-thumb-hover);
+}
+
+*::-webkit-scrollbar-thumb:active {
+  background: var(--ui-scrollbar-thumb-active);
+}
+
+/* Form elements inherit the document font */
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+::placeholder {
+  color: var(--ui-text-muted);
+  opacity: 1;
+}
+
+/* UA bold renders at 700; clamp headings and inline emphasis to the ladder */
+:where(h1, h2, h3, h4, h5, h6, strong, b) {
+  font-weight: var(--ui-weight-semibold);
+}
+
+/* Focus ring — keyboard focus only */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  box-shadow: var(--ui-focus-ring);
+}
+
+code,
+pre,
+kbd,
+samp {
+  font-family: var(--ui-font-mono);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
