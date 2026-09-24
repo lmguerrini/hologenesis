@@ -24,7 +24,7 @@ describe("pane layout bounds", () => {
   it("keeps the documented default geometry", () => {
     expect(paneBounds).toEqual({
       left: { min: 200, max: 420, default: 256 },
-      preview: { min: 140, max: 520, default: 280 },
+      preview: { min: 140, max: 3200, default: 280 },
       right: { min: 320, max: 760, default: 424 },
       centreMinWidth: 480
     });
@@ -63,18 +63,20 @@ describe("pane layout bounds", () => {
   });
 
   it("caps the preview at 75% of the centre column height", () => {
-    expect(resolvePreviewMax(2000)).toBe(520);
-    expect(resolvePreviewMax(800)).toBe(520);
+    // The proportional bound is authoritative; only an unmeasurable centre
+    // falls back to the absolute ceiling.
+    expect(resolvePreviewMax(2000)).toBe(1500);
+    expect(resolvePreviewMax(964)).toBe(723);
     expect(resolvePreviewMax(400)).toBe(300);
     expect(resolvePreviewMax(100)).toBe(140);
-    expect(resolvePreviewMax(0)).toBe(520);
+    expect(resolvePreviewMax(0)).toBe(3200);
   });
 });
 
 describe("pane layout clamping", () => {
   it("clamps every pane independently", () => {
     expect(clampPaneSizes({ left: 999, preview: 999, right: 999 }, 1600, 1000)).toEqual(
-      { left: 420, preview: 520, right: 760 }
+      { left: 420, preview: 750, right: 760 }
     );
     expect(clampPaneSizes({ left: 0, preview: 0, right: 0 }, 1600, 1000)).toEqual({
       left: 200,

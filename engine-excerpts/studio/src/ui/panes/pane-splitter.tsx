@@ -2,6 +2,7 @@
 
 import {
   useCallback,
+  useEffect,
   useRef,
   useState,
   type KeyboardEvent as ReactKeyboardEvent,
@@ -107,6 +108,10 @@ export function PaneSplitter({
     lastDragMovedRef.current = committed !== null && committed !== drag.startValue;
     latest.current.onCommit(committed ?? drag.startValue);
   }, [cancelLiveFrame]);
+
+  // change) must still release the cursor/user-select overrides and the
+  // mouse-fallback listeners, and commit the in-flight value.
+  useEffect(() => endDrag, [endDrag]);
 
   const beginDrag = useCallback(
     (

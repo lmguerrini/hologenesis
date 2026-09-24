@@ -15,7 +15,10 @@ export const PANE_STORAGE_KEY = "example.ui.panes.v1";
 
 export const paneBounds = {
   left: { min: 200, max: 420, default: 256 },
-  preview: { min: 140, max: 520, default: 280 },
+  // The live preview bound is 75% of the centre column (resolvePreviewMax);
+  // the absolute max is only a corrupt-payload ceiling far above any real
+  // centre height, so it never preempts the proportional contract.
+  preview: { min: 140, max: 3200, default: 280 },
   right: { min: 320, max: 760, default: 424 },
   centreMinWidth: 480
 } as const;
@@ -100,6 +103,22 @@ export function clampLeftWidth(width: number): number {
 
 export function clampRightWidth(width: number, viewportWidth: number): number {
   return clamp(width, paneBounds.right.min, resolveRightMax(viewportWidth));
+}
+
+/** Clamp against an already-resolved maximum (e.g. one derived from the sibling pane). */
+export function clampLeftWidthToBound(
+  width: number,
+  resolvedMax: number
+): number {
+  return clamp(width, paneBounds.left.min, resolvedMax);
+}
+
+/** Clamp against an already-resolved maximum (e.g. one derived from the sibling pane). */
+export function clampRightWidthToBound(
+  width: number,
+  resolvedMax: number
+): number {
+  return clamp(width, paneBounds.right.min, resolvedMax);
 }
 
 export function clampPreviewHeight(
