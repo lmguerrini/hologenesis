@@ -55,7 +55,7 @@ export function DashboardPageHero({
         <Icon size={24} />
       </div>
       <div className="dashboardPageHeroCopy">
-        <span>{eyebrow}</span>
+        {eyebrow ? <span>{eyebrow}</span> : null}
         <Heading>{title}</Heading>
         <p>{detail}</p>
       </div>
