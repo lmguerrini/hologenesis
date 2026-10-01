@@ -48,6 +48,7 @@
   --ui-status-running: var(--ui-accent);
   --ui-status-completed: var(--ui-success);
   --ui-status-failed: var(--ui-danger);
+  --ui-status-blocked: #bd91ff;
   --ui-status-neutral: var(--ui-text-tertiary);
 
   /* Colour — toggles */
@@ -82,9 +83,12 @@
   --ui-heading-gap: 8px;
   --ui-paragraph-gap: 8px;
   --ui-row-gap: 4px;
+  --ui-code-block-max-height: 45vh;
   --ui-divider-size: 1px;
   --ui-icon-size: 16px;
+  --ui-icon-size-sm: 12px;
   --ui-icon-stroke: 1.5;
+  --ui-control-value-max-width: min(160px, 30vw);
   --ui-status-dot-size: 6px;
   --ui-weight-regular: 400;
   --ui-weight-medium: 500;
