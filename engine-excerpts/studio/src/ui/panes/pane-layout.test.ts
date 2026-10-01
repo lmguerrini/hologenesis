@@ -1,6 +1,8 @@
 import { afterEach, describe, expect, it } from "vitest";
 import {
   PANE_STORAGE_KEY,
+  LAYOUT_STORAGE_KEY,
+  DEFAULT_LAYOUT_PRESET,
   applyPaneKeyboardStep,
   clampPaneSizes,
   clampPreviewHeight,
@@ -9,6 +11,9 @@ import {
   defaultPaneSizes,
   paneBounds,
   paneKeyboardDelta,
+  layoutPresetKey,
+  parsePaneLayoutPreset,
+  readPaneLayoutPreset,
   parsePanePreferences,
   readPanePreferences,
   resolveRightPaneMax,
@@ -17,6 +22,7 @@ import {
   resolveSidebarMax,
   serializePanePreferences,
   withDefaultPaneSizes,
+  writePaneLayoutPreset,
   writePanePreferences
 } from "./pane-layout";
 
@@ -111,6 +117,38 @@ describe("pane preference persistence", () => {
       serializePanePreferences(preferences)
     );
     expect(readPanePreferences()).toEqual(preferences);
+  });
+
+  it("keeps independent pane sizes for each pane preset", () => {
+    const defaultSizes = {
+      left: 280,
+      preview: 240,
+      right: 460,
+      leftCollapsed: false,
+      rightCollapsed: false
+    };
+    const swappedPreset = { primary: "right", preview: "above" } as const;
+    const swappedSizes = { ...defaultSizes, left: 310, preview: 320, right: 390 };
+
+    writePanePreferences(defaultSizes);
+    writePanePreferences(swappedSizes, swappedPreset);
+
+    expect(readPanePreferences()).toEqual(defaultSizes);
+    expect(readPanePreferences(swappedPreset)).toEqual(swappedSizes);
+    expect(window.localStorage.getItem(`${PANE_STORAGE_KEY}.${layoutPresetKey(swappedPreset)}`)).toBe(
+      serializePanePreferences(swappedSizes)
+    );
+  });
+
+  it("persists valid layout axes and safely defaults malformed values", () => {
+    const preset = { primary: "right", preview: "above" } as const;
+    writePaneLayoutPreset(preset);
+
+    expect(window.localStorage.getItem(LAYOUT_STORAGE_KEY)).toBe(JSON.stringify(preset));
+    expect(readPaneLayoutPreset()).toEqual(preset);
+    expect(parsePaneLayoutPreset('{"primary":"sideways","preview":"left"}')).toEqual(
+      DEFAULT_LAYOUT_PRESET
+    );
   });
 
   it("repairs corrupt and partial payloads field-by-field", () => {

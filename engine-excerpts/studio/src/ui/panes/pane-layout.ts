@@ -12,6 +12,58 @@ export type PanePreferences = PaneSizes & {
 };
 
 export const PANE_STORAGE_KEY = "example.ui.panes.v1";
+export const LAYOUT_STORAGE_KEY = "example.ui.layout.v1";
+
+export type PaneLayoutPreset = {
+  primary: "center" | "right";
+  preview: "above" | "below";
+};
+
+export const DEFAULT_LAYOUT_PRESET: PaneLayoutPreset = {
+  primary: "center",
+  preview: "below"
+};
+
+export function layoutPresetKey(preset: PaneLayoutPreset): string {
+  return `primary-${preset.primary}-preview-${preset.preview}`;
+}
+
+export function parsePaneLayoutPreset(raw: string | null): PaneLayoutPreset {
+  if (typeof raw !== "string") return DEFAULT_LAYOUT_PRESET;
+  try {
+    const parsed: unknown = JSON.parse(raw);
+    if (typeof parsed !== "object" || parsed === null) return DEFAULT_LAYOUT_PRESET;
+    const record = parsed as Record<string, unknown>;
+    return {
+      primary: record.primary === "right" ? "right" : "center",
+      preview: record.preview === "above" ? "above" : "below"
+    };
+  } catch {
+    return DEFAULT_LAYOUT_PRESET;
+  }
+}
+
+export function readPaneLayoutPreset(): PaneLayoutPreset {
+  try {
+    return parsePaneLayoutPreset(globalThis.window?.localStorage.getItem(LAYOUT_STORAGE_KEY) ?? null);
+  } catch {
+    return DEFAULT_LAYOUT_PRESET;
+  }
+}
+
+export function writePaneLayoutPreset(preset: PaneLayoutPreset): void {
+  try {
+    globalThis.window?.localStorage.setItem(LAYOUT_STORAGE_KEY, JSON.stringify(preset));
+  } catch {
+    // Layout preferences are optional when browser storage is unavailable.
+  }
+}
+
+function presetPaneStorageKey(preset: PaneLayoutPreset): string {
+  return layoutPresetKey(preset) === layoutPresetKey(DEFAULT_LAYOUT_PRESET)
+    ? PANE_STORAGE_KEY
+    : `${PANE_STORAGE_KEY}.${layoutPresetKey(preset)}`;
+}
 
 export const paneBounds = {
   left: { min: 200, max: 420, default: 256 },
@@ -220,27 +272,36 @@ function resolvePaneStorage(): Storage | null {
   }
 }
 
-export function readPanePreferences(): PanePreferences | null {
+export function readPanePreferences(preset: PaneLayoutPreset = DEFAULT_LAYOUT_PRESET): PanePreferences | null {
   const storage = resolvePaneStorage();
   if (!storage) {
     return null;
   }
 
   try {
-    return parsePanePreferences(storage.getItem(PANE_STORAGE_KEY));
+    const presetValue = storage.getItem(presetPaneStorageKey(preset));
+    if (presetValue !== null) return parsePanePreferences(presetValue);
+    // The unsuffixed v1 key is the legacy global layout. Use it to seed the
+    // default preset once, while other presets begin with their own defaults.
+    return layoutPresetKey(preset) === layoutPresetKey(DEFAULT_LAYOUT_PRESET)
+      ? parsePanePreferences(storage.getItem(PANE_STORAGE_KEY))
+      : null;
   } catch {
     return null;
   }
 }
 
-export function writePanePreferences(preferences: PanePreferences): void {
+export function writePanePreferences(
+  preferences: PanePreferences,
+  preset: PaneLayoutPreset = DEFAULT_LAYOUT_PRESET
+): void {
   const storage = resolvePaneStorage();
   if (!storage) {
     return;
   }
 
   try {
-    storage.setItem(PANE_STORAGE_KEY, serializePanePreferences(preferences));
+    storage.setItem(presetPaneStorageKey(preset), serializePanePreferences(preferences));
   } catch {
     // Storage can be full or blocked; pane geometry is not worth failing over.
   }
