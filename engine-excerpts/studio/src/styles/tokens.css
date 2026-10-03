@@ -110,6 +110,10 @@
   --ui-space-10: 40px;
   --ui-space-12: 48px;
 
+  
+  --ui-edge-inset-x: 8px;
+  --ui-edge-inset-y: 4px;
+
   /* Controls, rows, chrome */
   --ui-control-h-xs: 20px;
   --ui-control-h-sm: 24px;
