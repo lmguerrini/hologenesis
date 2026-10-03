@@ -2,6 +2,7 @@
 
 import { useState, type ReactNode } from "react";
 import { Check, Copy } from "lucide-react";
+import { tokenizeCode } from "./syntax-highlight";
 
 type MarkdownBlock =
   | { kind: "code"; content: string; language: string }
@@ -86,6 +87,7 @@ function CodeBlock({
 }) {
   const [copyState, setCopyState] = useState<"idle" | "copied" | "unavailable">("idle");
   const languageLabel = formatLanguageLabel(block.language);
+  const tokens = tokenizeCode(block.content, block.language);
   const isLong =
     block.content.split("\n").length >= longCodeLineCount ||
     block.content.length >= longCodeCharacterCount;
@@ -126,7 +128,16 @@ function CodeBlock({
         </button>
       </figcaption>
       <pre aria-label={`${languageLabel} code example`}>
-        <code>{block.content}</code>
+        <code>
+          {tokens.map((token, index) => (
+            <span
+              className={`markdownCodeToken markdownCodeToken--${token.kind}`}
+              key={`${index}-${token.kind}`}
+            >
+              {token.text}
+            </span>
+          ))}
+        </code>
       </pre>
       <span aria-live="polite" className="visuallyHidden" role="status">
         {copyState === "copied"

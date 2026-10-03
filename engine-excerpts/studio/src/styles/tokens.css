@@ -136,6 +136,18 @@
   --ui-dur-slow: 200ms;
   --ui-ease: ease;
   --ui-ease-move: cubic-bezier(0.2, 0, 0, 1);
+
+  
+  --ui-syntax-keyword: #82d2ce;
+  --ui-syntax-type: #efb080;
+  --ui-syntax-string: #e394dc;
+  --ui-syntax-number: #f8c762;
+  --ui-syntax-comment: #a0a0a0;
+  --ui-syntax-function: #ebc88d;
+  --ui-syntax-property: #aaa0fa;
+  --ui-syntax-variable: #d6d6dd;
+  --ui-syntax-operator: #d6d6dd;
+  --ui-syntax-punctuation: #d6d6dd;
 }
 
 /* Base element styles */
