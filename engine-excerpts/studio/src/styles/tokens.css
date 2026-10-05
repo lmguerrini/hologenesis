@@ -83,8 +83,8 @@
   --ui-control-letter-spacing: 0;
   --ui-control-inset-x: var(--ui-space-3);
   --ui-control-inset-y: var(--ui-space-2);
-  --ui-textarea-inset-x: var(--ui-space-3);
-  --ui-textarea-inset-y: var(--ui-space-3);
+  --ui-textarea-inset-x: var(--ui-space-5);
+  --ui-textarea-inset-y: var(--ui-space-3-5);
   --ui-leading: var(--ui-leading-body);
   --ui-leading-tight: 1.25;
   --ui-leading-prose: 1.55;
