@@ -237,13 +237,13 @@ textarea {
   padding-inline: var(--ui-textarea-inset-x);
 }
 
+/* Placeholders inherit their control's own type metrics (including any reading-scale override) so typed text and
+   placeholder are identical by construction; only the colour differs. */
 ::placeholder {
   color: var(--ui-text-muted);
-  font-family: var(--ui-control-font-family);
-  font-size: var(--ui-control-font-size);
-  font-weight: var(--ui-control-font-weight);
-  line-height: var(--ui-control-line-height);
-  letter-spacing: var(--ui-control-letter-spacing);
+  font: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
   opacity: 1;
 }
 
