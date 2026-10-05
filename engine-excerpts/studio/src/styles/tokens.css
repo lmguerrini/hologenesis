@@ -80,6 +80,7 @@
   --ui-control-font-size: var(--ui-text-base);
   --ui-control-font-weight: var(--ui-weight-regular);
   --ui-control-line-height: var(--ui-leading-body);
+  --ui-control-single-line-line-height: normal;
   --ui-control-letter-spacing: 0;
   --ui-control-inset-x: var(--ui-space-3);
   --ui-control-inset-y: var(--ui-space-2);
@@ -230,6 +231,12 @@ textarea {
 :where(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]), select) {
   padding-block: var(--ui-control-inset-y);
   padding-inline: var(--ui-control-inset-x);
+}
+
+/* Native single-line text controls and their placeholders share the browser's
+   intrinsic line box; fixed control heights continue to set their visual size. */
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]) {
+  line-height: var(--ui-control-single-line-line-height);
 }
 
 textarea {
