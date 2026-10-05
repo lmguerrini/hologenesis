@@ -36,6 +36,7 @@
   --ui-accent-soft: rgba(58, 156, 255, 0.14);
   --ui-on-accent: #0b1f38;
   --ui-focus-ring: 0 0 0 2px rgba(58, 156, 255, 0.5);
+  --ui-neutral-focus-ring: 0 0 0 2px rgba(244, 247, 251, 0.72);
 
   /* Colour — status */
   --ui-success: #45a86b;
@@ -75,6 +76,15 @@
   --ui-text-lg: 17px;
   --ui-text-xl: 20px;
   --ui-text-2xl: 24px;
+  --ui-control-font-family: var(--ui-font-sans);
+  --ui-control-font-size: var(--ui-text-base);
+  --ui-control-font-weight: var(--ui-weight-regular);
+  --ui-control-line-height: var(--ui-leading-body);
+  --ui-control-letter-spacing: 0;
+  --ui-control-inset-x: var(--ui-space-3);
+  --ui-control-inset-y: var(--ui-space-2);
+  --ui-textarea-inset-x: var(--ui-space-3);
+  --ui-textarea-inset-y: var(--ui-space-3);
   --ui-leading: var(--ui-leading-body);
   --ui-leading-tight: 1.25;
   --ui-leading-prose: 1.55;
@@ -209,13 +219,36 @@ button,
 input,
 select,
 textarea {
-  font: inherit;
+  font-family: var(--ui-control-font-family);
+  font-size: var(--ui-control-font-size);
+  font-weight: var(--ui-control-font-weight);
+  line-height: var(--ui-control-line-height);
+  letter-spacing: var(--ui-control-letter-spacing);
   color: inherit;
+}
+
+:where(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]), select) {
+  padding-block: var(--ui-control-inset-y);
+  padding-inline: var(--ui-control-inset-x);
+}
+
+textarea {
+  padding-block: var(--ui-textarea-inset-y);
+  padding-inline: var(--ui-textarea-inset-x);
 }
 
 ::placeholder {
   color: var(--ui-text-muted);
+  font-family: var(--ui-control-font-family);
+  font-size: var(--ui-control-font-size);
+  font-weight: var(--ui-control-font-weight);
+  line-height: var(--ui-control-line-height);
+  letter-spacing: var(--ui-control-letter-spacing);
   opacity: 1;
+}
+
+html[data-ui-theme="light"] {
+  --ui-neutral-focus-ring: 0 0 0 2px rgba(26, 28, 31, 0.72);
 }
 
 /* UA bold renders at 700; clamp headings and inline emphasis to the ladder */
