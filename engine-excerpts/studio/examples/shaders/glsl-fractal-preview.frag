@@ -3,12 +3,17 @@ precision mediump float;
 uniform vec2 u_resolution;
 uniform float u_time;
 
-vec3 luminousPalette(float value) {
-  const vec3 phase = vec3(0.08, 0.34, 0.62);
-  const vec3 amplitude = vec3(0.48, 0.46, 0.50);
-  const vec3 offset = vec3(0.50, 0.51, 0.50);
-  const vec3 frequency = vec3(1.00, 0.92, 1.08);
-  return offset + amplitude * cos(6.28318 * (frequency * value + phase));
+// Monotonic luminous ramp: deep navy field → indigo → violet → rose amber → pale gold at the set's edge.
+vec3 luminousRamp(float k) {
+  vec3 navy = vec3(0.016, 0.024, 0.075);
+  vec3 indigo = vec3(0.085, 0.12, 0.40);
+  vec3 violet = vec3(0.50, 0.17, 0.66);
+  vec3 amber = vec3(0.96, 0.46, 0.30);
+  vec3 gold = vec3(1.0, 0.88, 0.62);
+  vec3 color = mix(navy, indigo, smoothstep(0.0, 0.35, k));
+  color = mix(color, violet, smoothstep(0.30, 0.62, k));
+  color = mix(color, amber, smoothstep(0.58, 0.84, k));
+  return mix(color, gold, smoothstep(0.82, 1.0, k));
 }
 
 void main() {
@@ -29,7 +34,7 @@ void main() {
   float trap = 8.0;
   float escaped = 0.0;
 
-  for (int i = 0; i < 40; i++) {
+  for (int i = 0; i < 64; i++) {
     float radiusSquared = dot(z, z);
     trap = min(trap, abs(z.x + 0.31 * sin(z.y * 2.0 + t)));
     if (radiusSquared > 64.0) {
@@ -40,14 +45,16 @@ void main() {
     z = vec2(z.x * z.x - z.y * z.y, 2.0 * z.x * z.y) + c;
   }
 
-  float bands = smoothIteration * 0.105;
-  float filament = exp(-trap * 15.0);
-  float interior = 1.0 - escaped;
-  vec3 color = luminousPalette(bands + 0.035 * sin(p.x * 19.0 + p.y * 13.0 + t));
-  color *= 0.24 + 0.76 * escaped;
-  color += vec3(0.07, 0.015, 0.12) * interior;
-  color += filament * vec3(0.18, 0.45, 0.72) * (0.25 + 0.75 * escaped);
-  color += (0.5 + 0.5 * cos(t + p.y * 8.0)) * 0.035 * vec3(0.35, 0.55, 0.72);
+  // Exterior: brightness rises toward the boundary (log of the smooth escape count), with soft cyclic bands for depth.
+  float k = clamp(log(1.0 + smoothIteration) / log(1.0 + 40.0), 0.0, 1.0);
+  vec3 exterior = luminousRamp(k) * (0.88 + 0.12 * cos(smoothIteration * 0.9 + t));
+  float filament = exp(-trap * 18.0);
+  exterior += filament * vec3(0.38, 0.62, 1.0) * (0.10 + 0.32 * k);
 
+  // Interior: a deep, almost black indigo body whose orbit-trap veins carry faint violet and cyan light.
+  float vein = exp(-trap * 14.0);
+  vec3 interior = vec3(0.012, 0.010, 0.035) + vein * vec3(0.10, 0.06, 0.24) + vein * vein * vec3(0.05, 0.16, 0.22);
+
+  vec3 color = mix(interior, exterior, escaped);
   gl_FragColor = vec4(clamp(color, 0.0, 1.0), 1.0);
 }
