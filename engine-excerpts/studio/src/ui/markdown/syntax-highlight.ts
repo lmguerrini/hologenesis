@@ -47,7 +47,9 @@ export function tokenizeCode(source: string, language = ""): SyntaxToken[] {
       continue;
     }
 
-    const lineComment = rest.match(python ? /^#.*$/ : /^\/\/.*$/);
+    // the whole remaining source (the unanchored `$` dropped every comment
+    // that had more lines after it).
+    const lineComment = rest.match(python ? /^#[^\n]*/ : /^\/\/[^\n]*/);
     if (lineComment) {
       push("comment", lineComment[0]);
       index += lineComment[0].length;
