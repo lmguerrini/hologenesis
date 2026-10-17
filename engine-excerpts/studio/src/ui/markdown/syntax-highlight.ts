@@ -137,3 +137,20 @@ export function tokenizeCode(source: string, language = ""): SyntaxToken[] {
 
   return tokens;
 }
+
+
+export function splitHighlightedLines(tokens: SyntaxToken[]): SyntaxToken[][] {
+  const lines: SyntaxToken[][] = [[]];
+  for (const token of tokens) {
+    const pieces = token.text.split("\n");
+    pieces.forEach((piece, index) => {
+      if (piece) {
+        lines[lines.length - 1]?.push({ kind: token.kind, text: piece });
+      }
+      if (index < pieces.length - 1) {
+        lines.push([]);
+      }
+    });
+  }
+  return lines;
+}
